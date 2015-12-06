@@ -19,12 +19,18 @@
 
 - (void)setCustomBadgeValue:(NSString *)value
 {
-    UIView *view = [self valueForKey:@"view"];
+    UILabel *customBadgeLabel = objc_getAssociatedObject(self, @selector(customBadgeValue));
+    
+    if (!value || [value isEqualToString:@""]) {
+        customBadgeLabel.hidden = YES;
+        return;
+    } else {
+        customBadgeLabel.hidden = NO;
+    }
     
     [self setBadgeValue:value];
     
-    UILabel *customBadgeLabel = objc_getAssociatedObject(self, @selector(customBadgeValue));
-    
+    UIView *view = [self valueForKey:@"view"];
     UIView *badgeView = [view.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self isKindOfClass: %@", NSClassFromString(@"_UIBadgeView")]].firstObject;
     badgeView.hidden = YES;
     
